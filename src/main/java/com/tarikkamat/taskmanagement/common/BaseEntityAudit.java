@@ -1,6 +1,5 @@
 package com.tarikkamat.taskmanagement.common;
 
-import com.tarikkamat.taskmanagement.entity.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.MappedSuperclass;
 import lombok.Getter;
