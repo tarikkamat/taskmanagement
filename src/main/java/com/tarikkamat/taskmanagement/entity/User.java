@@ -2,11 +2,7 @@ package com.tarikkamat.taskmanagement.entity;
 
 import com.tarikkamat.taskmanagement.common.BaseEntityAudit;
 import com.tarikkamat.taskmanagement.enums.Role;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
@@ -37,6 +33,9 @@ public class User extends BaseEntityAudit implements UserDetails {
     @Column(name = "role")
     @Enumerated(EnumType.STRING)
     private Role role = Role.TEAM_MEMBER;
+
+    @ManyToMany(mappedBy = "teamMembers")
+    private List<Project> projects;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
