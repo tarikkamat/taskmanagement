@@ -1,6 +1,6 @@
 package com.tarikkamat.taskmanagement.config;
 
-import com.tarikkamat.taskmanagement.dto.user.UserDto;
+import com.tarikkamat.taskmanagement.dto.UserDto;
 import com.tarikkamat.taskmanagement.entity.User;
 import com.tarikkamat.taskmanagement.enums.Role;
 import com.tarikkamat.taskmanagement.mapper.UserMapper;

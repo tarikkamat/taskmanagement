@@ -1,6 +1,6 @@
 package com.tarikkamat.taskmanagement.service;
 
-import com.tarikkamat.taskmanagement.dto.user.UserDto;
+import com.tarikkamat.taskmanagement.dto.UserDto;
 
 import java.util.List;
 import java.util.Optional;

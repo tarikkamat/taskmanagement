@@ -1,8 +1,8 @@
-package com.tarikkamat.taskmanagement.dto.user;
+package com.tarikkamat.taskmanagement.dto;
 
 import java.io.Serializable;
 
-public record LoginResponse(
+public record TokenDto(
         String accessToken,
         long expirationIn
 ) implements Serializable {

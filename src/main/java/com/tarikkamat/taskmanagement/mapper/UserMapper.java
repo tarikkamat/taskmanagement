@@ -1,6 +1,6 @@
 package com.tarikkamat.taskmanagement.mapper;
 
-import com.tarikkamat.taskmanagement.dto.user.UserDto;
+import com.tarikkamat.taskmanagement.dto.UserDto;
 import com.tarikkamat.taskmanagement.entity.User;
 import org.mapstruct.*;
 

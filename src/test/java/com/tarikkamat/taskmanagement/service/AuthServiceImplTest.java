@@ -1,8 +1,8 @@
 package com.tarikkamat.taskmanagement.service;
 
-import com.tarikkamat.taskmanagement.dto.user.AuthenticateDto;
-import com.tarikkamat.taskmanagement.dto.user.LoginResponse;
-import com.tarikkamat.taskmanagement.dto.user.RegisterDto;
+import com.tarikkamat.taskmanagement.dto.AuthenticateDto;
+import com.tarikkamat.taskmanagement.dto.TokenDto;
+import com.tarikkamat.taskmanagement.dto.UserDto;
 import com.tarikkamat.taskmanagement.entity.User;
 import com.tarikkamat.taskmanagement.exception.DatabaseException;
 import com.tarikkamat.taskmanagement.mapper.UserMapper;
@@ -52,7 +52,7 @@ class AuthServiceImplTest {
 
     private User testUser;
     private AuthenticateDto authenticateDto;
-    private RegisterDto registerDto;
+    private UserDto registerUserDto;
 
     @BeforeEach
     void setUp() {
@@ -62,7 +62,7 @@ class AuthServiceImplTest {
         testUser.setPassword("encodedPassword");
 
         authenticateDto = new AuthenticateDto("test@example.com", "password");
-        registerDto = new RegisterDto("testuser", "test@example.com", "password");
+        registerUserDto = new UserDto(null,null,"test@example.com","testuser","password", null);
     }
 
     @Test
@@ -73,7 +73,7 @@ class AuthServiceImplTest {
         when(jwtService.getExpirationTime()).thenReturn(3600L);
 
         // Act
-        LoginResponse response = authService.authenticate(authenticateDto);
+        TokenDto response = authService.authenticate(authenticateDto);
 
         // Assert
         assertNotNull(response);
@@ -98,7 +98,7 @@ class AuthServiceImplTest {
         doNothing().when(userService).createUser(any());
 
         // Act & Assert
-        assertDoesNotThrow(() -> authService.register(registerDto));
+        assertDoesNotThrow(() -> authService.register(registerUserDto));
         verify(userService).createUser(any());
     }
 
@@ -109,6 +109,6 @@ class AuthServiceImplTest {
         doThrow(DataIntegrityViolationException.class).when(userService).createUser(any());
 
         // Act & Assert
-        assertThrows(DatabaseException.class, () -> authService.register(registerDto));
+        assertThrows(DatabaseException.class, () -> authService.register(registerUserDto));
     }
 } 

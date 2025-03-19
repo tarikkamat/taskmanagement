@@ -1,7 +1,7 @@
 package com.tarikkamat.taskmanagement.controller;
 
 import com.tarikkamat.taskmanagement.common.BaseResponse;
-import com.tarikkamat.taskmanagement.dto.user.UserDto;
+import com.tarikkamat.taskmanagement.dto.UserDto;
 import com.tarikkamat.taskmanagement.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

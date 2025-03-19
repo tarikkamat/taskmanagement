@@ -1,9 +1,9 @@
 package com.tarikkamat.taskmanagement.controller;
 
 import com.tarikkamat.taskmanagement.common.BaseResponse;
-import com.tarikkamat.taskmanagement.dto.user.AuthenticateDto;
-import com.tarikkamat.taskmanagement.dto.user.LoginResponse;
-import com.tarikkamat.taskmanagement.dto.user.RegisterDto;
+import com.tarikkamat.taskmanagement.dto.AuthenticateDto;
+import com.tarikkamat.taskmanagement.dto.TokenDto;
+import com.tarikkamat.taskmanagement.dto.UserDto;
 import com.tarikkamat.taskmanagement.service.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -18,10 +18,10 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/authenticate")
-    public ResponseEntity<BaseResponse<LoginResponse>> authenticate(@Valid @RequestBody AuthenticateDto authenticateDto) {
+    public ResponseEntity<BaseResponse<TokenDto>> authenticate(@Valid @RequestBody AuthenticateDto authenticateDto) {
         try {
-            LoginResponse loginResponse = authService.authenticate(authenticateDto);
-            return ResponseEntity.ok(new BaseResponse<>(true, "Login successful", 200, loginResponse));
+            TokenDto tokenDto = authService.authenticate(authenticateDto);
+            return ResponseEntity.ok(new BaseResponse<>(true, "Login successful", 200, tokenDto));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body(new BaseResponse<>(false, e.getMessage(), 401, null));
@@ -29,9 +29,9 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<BaseResponse<Void>> register(@Valid @RequestBody RegisterDto registerDto) {
+    public ResponseEntity<BaseResponse<Void>> register(@Valid @RequestBody UserDto registerUserDto) {
         try {
-            authService.register(registerDto);
+            authService.register(registerUserDto);
             return ResponseEntity.status(HttpStatus.CREATED)
                     .body(new BaseResponse<>(true, "Registration successful", 201, null));
         } catch (Exception e) {

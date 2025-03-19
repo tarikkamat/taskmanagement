@@ -1,4 +1,4 @@
-package com.tarikkamat.taskmanagement.dto.user;
+package com.tarikkamat.taskmanagement.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;

@@ -1,8 +1,8 @@
 package com.tarikkamat.taskmanagement.controller;
 
-import com.tarikkamat.taskmanagement.dto.user.AuthenticateDto;
-import com.tarikkamat.taskmanagement.dto.user.LoginResponse;
-import com.tarikkamat.taskmanagement.dto.user.RegisterDto;
+import com.tarikkamat.taskmanagement.dto.AuthenticateDto;
+import com.tarikkamat.taskmanagement.dto.TokenDto;
+import com.tarikkamat.taskmanagement.dto.UserDto;
 import com.tarikkamat.taskmanagement.service.AuthService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -38,8 +38,8 @@ class AuthControllerTest {
     void authenticate_Success() throws Exception {
         // Arrange
         AuthenticateDto authenticateDto = new AuthenticateDto("test@example.com", "password");
-        LoginResponse loginResponse = new LoginResponse("test-token", 3600L);
-        when(authService.authenticate(any(AuthenticateDto.class))).thenReturn(loginResponse);
+        TokenDto tokenDto = new TokenDto("test-token", 3600L);
+        when(authService.authenticate(any(AuthenticateDto.class))).thenReturn(tokenDto);
 
         // Act & Assert
         mockMvc.perform(post("/api/v1/authenticate")
@@ -55,7 +55,7 @@ class AuthControllerTest {
     @Test
     void register_Success() throws Exception {
         // Arrange
-        RegisterDto registerDto = new RegisterDto("testuser", "test@example.com", "password");
+        UserDto registerUserDto = new UserDto(null,null,"test@example.com", "testuser", "password", null);
 
         // Act & Assert
         mockMvc.perform(post("/api/v1/register")

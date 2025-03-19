@@ -1,8 +1,8 @@
 package com.tarikkamat.taskmanagement.service;
 
-import com.tarikkamat.taskmanagement.dto.user.AuthenticateDto;
-import com.tarikkamat.taskmanagement.dto.user.LoginResponse;
-import com.tarikkamat.taskmanagement.dto.user.RegisterDto;
+import com.tarikkamat.taskmanagement.dto.AuthenticateDto;
+import com.tarikkamat.taskmanagement.dto.TokenDto;
+import com.tarikkamat.taskmanagement.dto.UserDto;
 import com.tarikkamat.taskmanagement.entity.User;
 import com.tarikkamat.taskmanagement.exception.DatabaseException;
 import com.tarikkamat.taskmanagement.mapper.UserMapper;
@@ -27,7 +27,7 @@ public class AuthServiceImpl implements AuthService {
     private final UserRepository userRepository;
 
     @Override
-    public LoginResponse authenticate(AuthenticateDto authenticateDto) {
+    public TokenDto authenticate(AuthenticateDto authenticateDto) {
         String identifier = authenticateDto.identifier();
         String password = authenticateDto.password();
 
@@ -39,16 +39,16 @@ public class AuthServiceImpl implements AuthService {
         String accessToken = jwtService.generateToken(user);
         long expiresIn = jwtService.getExpirationTime();
 
-        return new LoginResponse(accessToken, expiresIn);
+        return new TokenDto(accessToken, expiresIn);
     }
 
     @Override
     @Transactional
-    public void register(RegisterDto registerDto) {
+    public void register(UserDto registerUserDto) {
         try {
-            String username = registerDto.username();
-            String email = registerDto.email();
-            String password = registerDto.password();
+            String username = registerUserDto.username();
+            String email = registerUserDto.email();
+            String password = registerUserDto.password();
 
             User createdUser = new User();
             createdUser.setUsername(username);
