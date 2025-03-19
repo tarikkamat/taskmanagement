@@ -7,6 +7,8 @@ import com.tarikkamat.taskmanagement.dto.user.RegisterDto;
 import com.tarikkamat.taskmanagement.service.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -16,20 +18,22 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/authenticate")
-    public BaseResponse<LoginResponse> authenticate(@Valid @RequestBody AuthenticateDto authenticateDto) {
+    public ResponseEntity<BaseResponse<LoginResponse>> authenticate(@Valid @RequestBody AuthenticateDto authenticateDto) {
         try {
             LoginResponse loginResponse = authService.authenticate(authenticateDto);
-            return new BaseResponse<>(true, "Login successful", 200, loginResponse);
+            return ResponseEntity.ok(new BaseResponse<>(true, "Login successful", 200, loginResponse));
         } catch (Exception e) {
-            return new BaseResponse<>(false, e.getMessage(), 401, null);
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(new BaseResponse<>(false, e.getMessage(), 401, null));
         }
     }
 
     @PostMapping("/register")
-    public BaseResponse<Void> register(@Valid @RequestBody RegisterDto registerDto) {
+    public ResponseEntity<BaseResponse<Void>> register(@Valid @RequestBody RegisterDto registerDto) {
         try {
             authService.register(registerDto);
-            return new BaseResponse<>(true, "Registration successful", 201, null);
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .body(new BaseResponse<>(true, "Registration successful", 201, null));
         } catch (Exception e) {
             throw e;
         }

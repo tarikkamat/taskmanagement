@@ -3,7 +3,6 @@ package com.tarikkamat.taskmanagement.service;
 import com.tarikkamat.taskmanagement.dto.user.AuthenticateDto;
 import com.tarikkamat.taskmanagement.dto.user.LoginResponse;
 import com.tarikkamat.taskmanagement.dto.user.RegisterDto;
-import com.tarikkamat.taskmanagement.dto.user.UserDto;
 import com.tarikkamat.taskmanagement.entity.User;
 import com.tarikkamat.taskmanagement.exception.DatabaseException;
 import com.tarikkamat.taskmanagement.mapper.UserMapper;
