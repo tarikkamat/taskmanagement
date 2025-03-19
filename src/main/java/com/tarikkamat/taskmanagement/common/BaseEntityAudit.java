@@ -16,6 +16,7 @@ import java.util.Objects;
 public abstract class BaseEntityAudit extends BaseEntity {
     private String createdBy;
     private String updatedBy;
+    private String deletedBy;
 
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
@@ -25,6 +26,9 @@ public abstract class BaseEntityAudit extends BaseEntity {
     @Column(name = "updated_at")
     private Date updatedAt;
 
+    @Column(name = "deleted_at")
+    private Date deletedAt;
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -33,13 +37,13 @@ public abstract class BaseEntityAudit extends BaseEntity {
         return Objects.equals(createdBy, that.createdBy) &&
                 Objects.equals(updatedBy, that.updatedBy) &&
                 Objects.equals(createdAt, that.createdAt) &&
-                Objects.equals(updatedAt, that.updatedAt);
+                Objects.equals(updatedAt, that.updatedAt) &&
+                Objects.equals(deletedBy, that.deletedBy);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(),
-                createdBy, updatedBy, createdAt, updatedAt);
+        return Objects.hash(super.hashCode(), createdBy, updatedBy, deletedBy, createdAt, updatedAt, deletedAt);
     }
 
     @Override
@@ -47,8 +51,10 @@ public abstract class BaseEntityAudit extends BaseEntity {
         return "BaseEntityAudit{" +
                 "createdBy='" + (createdBy != null ? createdBy : "null") + '\'' +
                 ", updatedBy='" + (updatedBy != null ? updatedBy : "null") + '\'' +
+                ", deletedBy='" + (deletedBy != null ? deletedBy : "null") + '\'' +
                 ", createdAt=" + (createdAt != null ? createdAt : "null") +
                 ", updatedAt=" + (updatedAt != null ? updatedAt : "null") +
+                ", deletedAt=" + (deletedAt != null ? deletedAt : "null") +
                 "}" +
                 super.toString();
     }
