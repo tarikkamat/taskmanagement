@@ -4,6 +4,6 @@ import java.io.Serializable;
 
 public record LoginResponse(
         String accessToken,
-        long expirationAt
+        long expirationIn
 ) implements Serializable {
 }

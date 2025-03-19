@@ -78,7 +78,7 @@ class AuthServiceImplTest {
         // Assert
         assertNotNull(response);
         assertEquals("test-token", response.accessToken());
-        assertEquals(3600L, response.expirationAt());
+        assertEquals(3600L, response.expirationIn());
         verify(authenticationManager).authenticate(any(UsernamePasswordAuthenticationToken.class));
     }
 

@@ -49,7 +49,7 @@ class AuthControllerTest {
                 .andExpect(jsonPath("$.status").value(true))
                 .andExpect(jsonPath("$.message").value("Login successful"))
                 .andExpect(jsonPath("$.data.accessToken").value("test-token"))
-                .andExpect(jsonPath("$.data.expirationAt").value(3600));
+                .andExpect(jsonPath("$.data.expirationIn").value(3600));
     }
 
     @Test
