@@ -4,6 +4,8 @@ import com.tarikkamat.taskmanagement.common.BaseEntityAudit;
 import com.tarikkamat.taskmanagement.enums.Role;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
@@ -33,6 +35,7 @@ public class User extends BaseEntityAudit implements UserDetails {
     private String password;
 
     @Column(name = "role")
+    @Enumerated(EnumType.STRING)
     private Role role = Role.TEAM_MEMBER;
 
     @Override
@@ -76,7 +79,6 @@ public class User extends BaseEntityAudit implements UserDetails {
                 "fullName='" + fullName + '\'' +
                 ", email='" + email + '\'' +
                 ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
                 ", role=" + role +
                 '}' +
                 super.toString();

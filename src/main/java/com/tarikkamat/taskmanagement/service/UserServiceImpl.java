@@ -6,6 +6,9 @@ import com.tarikkamat.taskmanagement.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
@@ -20,5 +23,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public void createUser(UserDto userDto){
         userRepository.save(userMapper.toEntity(userDto));
+    }
+
+    @Override
+    public Optional<List<UserDto>> getAllUsers() {
+        List<UserDto> userDtos = userMapper.toDtoList(userRepository.findAll());
+        return Optional.ofNullable(userDtos);
     }
 }
