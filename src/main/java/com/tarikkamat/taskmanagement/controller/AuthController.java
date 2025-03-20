@@ -1,9 +1,9 @@
 package com.tarikkamat.taskmanagement.controller;
 
 import com.tarikkamat.taskmanagement.common.BaseResponse;
-import com.tarikkamat.taskmanagement.dto.AuthenticateDto;
 import com.tarikkamat.taskmanagement.dto.TokenDto;
 import com.tarikkamat.taskmanagement.dto.UserDto;
+import com.tarikkamat.taskmanagement.requests.LoginRequest;
 import com.tarikkamat.taskmanagement.service.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -21,9 +21,9 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/authenticate")
-    public ResponseEntity<BaseResponse<TokenDto>> authenticate(@Valid @RequestBody AuthenticateDto authenticateDto) {
+    public ResponseEntity<BaseResponse<TokenDto>> authenticate(@Valid @RequestBody LoginRequest loginRequest) {
         try {
-            TokenDto tokenDto = authService.authenticate(authenticateDto);
+            TokenDto tokenDto = authService.authenticate(loginRequest);
             return ResponseEntity.ok(new BaseResponse<>(true, "Login successful", 200, tokenDto));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)

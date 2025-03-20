@@ -1,7 +1,7 @@
 package com.tarikkamat.taskmanagement.controller;
 
-import com.tarikkamat.taskmanagement.dto.AuthenticateDto;
 import com.tarikkamat.taskmanagement.dto.TokenDto;
+import com.tarikkamat.taskmanagement.requests.LoginRequest;
 import com.tarikkamat.taskmanagement.service.AuthService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,7 +15,8 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 class AuthControllerTest {
 
@@ -36,12 +37,12 @@ class AuthControllerTest {
     @Test
     void authenticate_Success() throws Exception {
         TokenDto tokenDto = new TokenDto("test-token", 3600L);
-        when(authService.authenticate(any(AuthenticateDto.class))).thenReturn(tokenDto);
+        when(authService.authenticate(any(LoginRequest.class))).thenReturn(tokenDto);
 
         // Act & Assert
         mockMvc.perform(post("/api/v1/authenticate")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"identifier\":\"test@example.com\",\"password\":\"password\"}"))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"identifier\":\"test@example.com\",\"password\":\"password\"}"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.status").value(true))
                 .andExpect(jsonPath("$.message").value("Login successful"))
@@ -53,8 +54,8 @@ class AuthControllerTest {
     void register_Success() throws Exception {
         // Act & Assert
         mockMvc.perform(post("/api/v1/register")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"username\":\"testuser\",\"email\":\"test@example.com\",\"password\":\"password\"}"))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"username\":\"testuser\",\"email\":\"test@example.com\",\"password\":\"password\"}"))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.status").value(true))
                 .andExpect(jsonPath("$.message").value("Registration successful"));

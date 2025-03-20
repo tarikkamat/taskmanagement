@@ -1,12 +1,12 @@
 package com.tarikkamat.taskmanagement.service;
 
-import com.tarikkamat.taskmanagement.dto.AuthenticateDto;
 import com.tarikkamat.taskmanagement.dto.TokenDto;
 import com.tarikkamat.taskmanagement.dto.UserDto;
 import com.tarikkamat.taskmanagement.entity.User;
 import com.tarikkamat.taskmanagement.exception.DatabaseException;
 import com.tarikkamat.taskmanagement.mapper.UserMapper;
 import com.tarikkamat.taskmanagement.repository.UserRepository;
+import com.tarikkamat.taskmanagement.requests.LoginRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -51,7 +51,7 @@ class AuthServiceImplTest {
     private AuthServiceImpl authService;
 
     private User testUser;
-    private AuthenticateDto authenticateDto;
+    private LoginRequest loginRequest;
     private UserDto registerUserDto;
 
     @BeforeEach
@@ -61,8 +61,8 @@ class AuthServiceImplTest {
         testUser.setEmail("test@example.com");
         testUser.setPassword("encodedPassword");
 
-        authenticateDto = new AuthenticateDto("test@example.com", "password");
-        registerUserDto = new UserDto(null,null,"test@example.com","testuser","password", null);
+        loginRequest = new LoginRequest("test@example.com", "password");
+        registerUserDto = new UserDto(null, null, "test@example.com", "testuser", "password", null);
     }
 
     @Test
@@ -73,7 +73,7 @@ class AuthServiceImplTest {
         when(jwtService.getExpirationTime()).thenReturn(3600L);
 
         // Act
-        TokenDto response = authService.authenticate(authenticateDto);
+        TokenDto response = authService.authenticate(loginRequest);
 
         // Assert
         assertNotNull(response);
@@ -88,7 +88,7 @@ class AuthServiceImplTest {
         when(userRepository.findByEmailOrUsername(anyString())).thenReturn(Optional.empty());
 
         // Act & Assert
-        assertThrows(UsernameNotFoundException.class, () -> authService.authenticate(authenticateDto));
+        assertThrows(UsernameNotFoundException.class, () -> authService.authenticate(loginRequest));
     }
 
     @Test
