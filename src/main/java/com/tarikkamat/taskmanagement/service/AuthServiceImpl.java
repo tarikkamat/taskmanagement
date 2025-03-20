@@ -1,12 +1,12 @@
 package com.tarikkamat.taskmanagement.service;
 
-import com.tarikkamat.taskmanagement.dto.AuthenticateDto;
 import com.tarikkamat.taskmanagement.dto.TokenDto;
 import com.tarikkamat.taskmanagement.dto.UserDto;
 import com.tarikkamat.taskmanagement.entity.User;
 import com.tarikkamat.taskmanagement.exception.DatabaseException;
 import com.tarikkamat.taskmanagement.mapper.UserMapper;
 import com.tarikkamat.taskmanagement.repository.UserRepository;
+import com.tarikkamat.taskmanagement.requests.LoginRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -27,9 +27,9 @@ public class AuthServiceImpl implements AuthService {
     private final UserRepository userRepository;
 
     @Override
-    public TokenDto authenticate(AuthenticateDto authenticateDto) {
-        String identifier = authenticateDto.identifier();
-        String password = authenticateDto.password();
+    public TokenDto authenticate(LoginRequest loginRequest) {
+        String identifier = loginRequest.identifier();
+        String password = loginRequest.password();
 
         User user = userRepository.findByEmailOrUsername(identifier)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
