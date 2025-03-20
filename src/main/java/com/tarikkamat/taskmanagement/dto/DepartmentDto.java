@@ -1,7 +1,6 @@
 package com.tarikkamat.taskmanagement.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.tarikkamat.taskmanagement.enums.ProjectStatus;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -9,10 +8,10 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * DTO for {@link com.tarikkamat.taskmanagement.entity.Project}
+ * DTO for {@link com.tarikkamat.taskmanagement.entity.Department}
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public record ProjectDto(
+public record DepartmentDto(
         UUID id,
         String createdBy,
         String updatedBy,
@@ -20,10 +19,9 @@ public record ProjectDto(
         Date createdAt,
         Date updatedAt,
         Date deletedAt,
-        String title,
+        String name,
         String description,
-        String departmentName,
-        ProjectStatus status,
-        List<UserDto> teamMembers
+        List<ProjectDto> projects,
+        List<UserDto> members
 ) implements Serializable {
 }

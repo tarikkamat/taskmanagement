@@ -18,7 +18,7 @@ import java.util.List;
 @Table(name = "users")
 public class User extends BaseEntityAudit implements UserDetails {
 
-    @Column(name = "full_name")
+    @Column(name = "full_name", nullable = true)
     private String fullName;
 
     @Column(name = "email", unique = true, nullable = false)
@@ -33,6 +33,13 @@ public class User extends BaseEntityAudit implements UserDetails {
     @Column(name = "role")
     @Enumerated(EnumType.STRING)
     private Role role = Role.TEAM_MEMBER;
+
+    @ManyToOne
+    @JoinColumn(name = "department_id")
+    private Department department;
+
+    @OneToOne(mappedBy = "manager")
+    private Department managedDepartment;
 
     @ManyToMany(mappedBy = "teamMembers")
     private List<Project> projects;
@@ -53,32 +60,15 @@ public class User extends BaseEntityAudit implements UserDetails {
     }
 
     @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true;
-    }
-
-    @Override
     public String toString() {
         return "User{" +
                 "fullName='" + fullName + '\'' +
                 ", email='" + email + '\'' +
                 ", username='" + username + '\'' +
-                ", role=" + role +
+                ", role=" + role + '\'' +
+                ", department=" + department + '\'' +
+                ", managedDepartment=" + managedDepartment + '\'' +
+                ", projects=" + projects +
                 '}' +
                 super.toString();
     }

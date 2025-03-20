@@ -13,9 +13,20 @@ import java.util.List;
 @Setter
 @Table(name = "projects")
 public class Project extends BaseEntityAudit {
+
+    @Column(name = "title", nullable = false)
     private String title;
+
+    @Column(name = "description")
     private String description;
-    private String departmentName;
+
+    @ManyToOne
+    @JoinColumn(name = "department_id", nullable = false)
+    private Department department;
+
+    @ManyToOne
+    @JoinColumn(name = "project_manager_id")
+    private User projectManager;
 
     @Enumerated(EnumType.STRING)
     private ProjectStatus status;

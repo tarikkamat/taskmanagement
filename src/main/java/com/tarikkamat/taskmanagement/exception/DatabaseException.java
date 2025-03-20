@@ -24,21 +24,21 @@ public class DatabaseException extends RuntimeException {
         if (ex.getCause() instanceof ConstraintViolationException) {
             ConstraintViolationException cause = (ConstraintViolationException) ex.getCause();
             String constraintName = cause.getConstraintName();
-            
+
             log.debug("Constraint Name: {}", constraintName);
             log.debug("Error Message: {}", cause.getMessage());
             log.debug("SQL State: {}", cause.getSQLState());
-            
+
             if (constraintName != null) {
                 String fieldName = constraintName.split("_")[1]; // users_email_key -> email
                 String readableFieldName = fieldName.replace("_", " ").trim();
-                
+
                 errors.put(fieldName, String.format("This %s is already in use", readableFieldName));
             } else {
                 errors.put("unknown", "A database constraint was violated");
             }
         }
-        
+
         if (errors.isEmpty()) {
             errors.put("unknown", "A database error occurred");
         }

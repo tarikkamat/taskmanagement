@@ -2,7 +2,6 @@ package com.tarikkamat.taskmanagement.controller;
 
 import com.tarikkamat.taskmanagement.dto.AuthenticateDto;
 import com.tarikkamat.taskmanagement.dto.TokenDto;
-import com.tarikkamat.taskmanagement.dto.UserDto;
 import com.tarikkamat.taskmanagement.service.AuthService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -36,8 +35,6 @@ class AuthControllerTest {
 
     @Test
     void authenticate_Success() throws Exception {
-        // Arrange
-        AuthenticateDto authenticateDto = new AuthenticateDto("test@example.com", "password");
         TokenDto tokenDto = new TokenDto("test-token", 3600L);
         when(authService.authenticate(any(AuthenticateDto.class))).thenReturn(tokenDto);
 
@@ -54,9 +51,6 @@ class AuthControllerTest {
 
     @Test
     void register_Success() throws Exception {
-        // Arrange
-        UserDto registerUserDto = new UserDto(null,null,"test@example.com", "testuser", "password", null);
-
         // Act & Assert
         mockMvc.perform(post("/api/v1/register")
                 .contentType(MediaType.APPLICATION_JSON)
