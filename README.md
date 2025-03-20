@@ -48,25 +48,41 @@ Uygulama başlatıldığında aşağıdaki servisler kullanılabilir olacaktır:
 
 ### 👥 Varsayılan Kullanıcılar
 
-Uygulama ilk kez başlatıldığında aşağıdaki varsayılan kullanıcılar otomatik olarak oluşturulacaktır:
+Uygulama ilk kez başlatıldığında aşağıdaki departmanlar ve kullanıcılar otomatik olarak oluşturulacaktır:
 
-1. Project Manager
+#### Departmanlar
+- Software Development
+- Marketing
+
+#### Örnek Kullanıcılar (Rol Bazlı)
+
+1. Proje Yöneticisi (PROJECT_MANAGER)
+   * Ad: Software Project Manager
    * Email: project.manager@example.com
    * Kullanıcı Adı: projectmanager
-   * Şifre: ProjectManager123!
-   * Rol: PROJECT_MANAGER
+   * Şifre: Manager123!
+   * Departman: Software Development
 
-2. Team Leader
-   * Email: team.leader@example.com
-   * Kullanıcı Adı: teamleader
-   * Şifre: TeamLeader123!
-   * Rol: TEAM_LEADER
+2. Grup Yöneticisi (GROUP_MANAGER)
+   * Ad: Software Manager
+   * Email: software.manager@example.com
+   * Kullanıcı Adı: softwaremanager
+   * Şifre: Manager123!
+   * Departman: Software Development
 
-3. Team Member
-   * Email: team.member@example.com
-   * Kullanıcı Adı: teammember
-   * Şifre: TeamMember123!
-   * Rol: TEAM_MEMBER
+3. Takım Lideri (TEAM_LEADER)
+   * Ad: Backend Team Leader
+   * Email: backend.lead@example.com
+   * Kullanıcı Adı: backendlead
+   * Şifre: Leader123!
+   * Departman: Software Development
+
+4. Takım Üyesi (TEAM_MEMBER)
+   * Ad: Backend Developer 1
+   * Email: backend1@example.com
+   * Kullanıcı Adı: backend1
+   * Şifre: Member123!
+   * Departman: Software Development
 
 > Not: Bu kullanıcılar sadece veritabanı boş olduğunda oluşturulur. Eğer veritabanında kullanıcı varsa, yeni kullanıcılar oluşturulmaz.
 

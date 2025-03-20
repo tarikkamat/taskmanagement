@@ -32,6 +32,9 @@ public class DefaultUserInitializer implements CommandLineRunner {
             Department softwareDepartment = createDepartment("Software Development");
             Department marketingDepartment = createDepartment("Marketing");
 
+            // Create project manager for Software Department
+            User softwareProjectManager = createAndSaveUser("Software Project Manager", "project.manager@example.com", "projectmanager", "Manager123!", Role.PROJECT_MANAGER, softwareDepartment);
+            
             // Create department managers
             User softwareManager = createAndSaveUser("Software Manager", "software.manager@example.com", "softwaremanager", "Manager123!", Role.GROUP_MANAGER, softwareDepartment);
             User marketingManager = createAndSaveUser("Marketing Manager", "marketing.manager@example.com", "marketingmanager", "Manager123!", Role.GROUP_MANAGER, marketingDepartment);
