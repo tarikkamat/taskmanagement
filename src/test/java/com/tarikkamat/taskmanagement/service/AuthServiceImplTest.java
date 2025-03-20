@@ -68,8 +68,10 @@ class AuthServiceImplTest {
     @Test
     void authenticate_Success() {
         // Arrange
-        when(userRepository.findByEmailOrUsername(anyString())).thenReturn(Optional.of(testUser));
-        when(jwtService.generateToken(any(User.class))).thenReturn("test-token");
+        when(userService.findByEmailOrUsername(anyString())).thenReturn(testUser);
+        when(authenticationManager.authenticate(any(UsernamePasswordAuthenticationToken.class)))
+            .thenReturn(new UsernamePasswordAuthenticationToken(testUser, "password"));
+        when(jwtService.generateToken(testUser)).thenReturn("test-token");
         when(jwtService.getExpirationTime()).thenReturn(3600L);
 
         // Act
@@ -85,10 +87,12 @@ class AuthServiceImplTest {
     @Test
     void authenticate_UserNotFound() {
         // Arrange
-        when(userRepository.findByEmailOrUsername(anyString())).thenReturn(Optional.empty());
+        when(userService.findByEmailOrUsername(anyString()))
+            .thenThrow(new UsernameNotFoundException("User not found"));
 
         // Act & Assert
         assertThrows(UsernameNotFoundException.class, () -> authService.authenticate(loginRequest));
+        verify(authenticationManager, never()).authenticate(any());
     }
 
     @Test
