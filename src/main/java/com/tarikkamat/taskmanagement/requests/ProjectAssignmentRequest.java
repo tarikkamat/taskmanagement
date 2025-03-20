@@ -1,11 +1,11 @@
 package com.tarikkamat.taskmanagement.requests;
 
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 import java.util.UUID;
 
 public record ProjectAssignmentRequest(
-        @NotBlank(message = "projectId is required")
+        @NotNull(message = "projectId is required")
         UUID projectId
 ) {
 }

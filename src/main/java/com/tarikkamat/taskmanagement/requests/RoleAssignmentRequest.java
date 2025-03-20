@@ -1,10 +1,10 @@
 package com.tarikkamat.taskmanagement.requests;
 
 import com.tarikkamat.taskmanagement.enums.Role;
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 public record RoleAssignmentRequest(
-        @NotBlank(message = "Role is required")
+        @NotNull(message = "Role is required")
         Role role
 ) {
 }
