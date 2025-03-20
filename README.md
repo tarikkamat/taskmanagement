@@ -36,6 +36,8 @@ cp example.env .env
 docker-compose -f docker/docker-compose.yaml up -d
 ```
 
+> Not: Geliştirme amacıyla demo içeriğini (örnek kullanıcılar, departmanlar) etkinleştirmek için `.env` dosyasında `DEMO_CONTENT_ENABLED=true` olarak ayarlayabilirsiniz.
+
 ### 📦 Servisler
 
 Uygulama başlatıldığında aşağıdaki servisler kullanılabilir olacaktır:
@@ -49,6 +51,11 @@ Uygulama başlatıldığında aşağıdaki servisler kullanılabilir olacaktır:
 ### 👥 Varsayılan Kullanıcılar
 
 Uygulama ilk kez başlatıldığında aşağıdaki departmanlar ve kullanıcılar otomatik olarak oluşturulacaktır:
+
+> **Not**: Demo içeriği (örnek kullanıcılar ve departmanlar) oluşturma özelliği, yapılandırma dosyalarında `app.demo-content.enabled` parametresi ile kontrol edilmektedir. Bu özellik:
+> - Dev ortamında (`application-dev.yaml`) varsayılan olarak etkindir
+> - Prod ortamında (`application-prod.yaml`) varsayılan olarak devre dışıdır
+> - `.env` dosyasında `DEMO_CONTENT_ENABLED` parametresi ile kontrol edilebilir
 
 #### Departmanlar
 - Software Development

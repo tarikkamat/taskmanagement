@@ -17,3 +17,7 @@ security:
   jwt:
     secret-key: ${JWT_SECRET_KEY}
     expiration-time: 86400000 
+
+app:
+  demo-content:
+    enabled: false

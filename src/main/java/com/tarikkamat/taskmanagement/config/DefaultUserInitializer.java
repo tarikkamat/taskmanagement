@@ -8,6 +8,7 @@ import com.tarikkamat.taskmanagement.mapper.UserMapper;
 import com.tarikkamat.taskmanagement.repository.DepartmentRepository;
 import com.tarikkamat.taskmanagement.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -23,11 +24,14 @@ public class DefaultUserInitializer implements CommandLineRunner {
     private final DepartmentRepository departmentRepository;
     private final PasswordEncoder passwordEncoder;
     private final UserMapper userMapper;
+    
+    @Value("${app.demo-content.enabled:false}")
+    private boolean demoContentEnabled;
 
     @Override
     @Transactional
     public void run(String... args) {
-        if (userRepository.count() == 0) {
+        if (demoContentEnabled && userRepository.count() == 0) {
             // Create departments
             Department softwareDepartment = createDepartment("Software Development");
             Department marketingDepartment = createDepartment("Marketing");
