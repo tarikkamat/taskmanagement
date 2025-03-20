@@ -2,8 +2,10 @@ package com.tarikkamat.taskmanagement.service;
 
 import com.tarikkamat.taskmanagement.dto.UserDto;
 import com.tarikkamat.taskmanagement.entity.User;
+import com.tarikkamat.taskmanagement.enums.Role;
 import com.tarikkamat.taskmanagement.mapper.UserMapper;
 import com.tarikkamat.taskmanagement.repository.UserRepository;
+import com.tarikkamat.taskmanagement.requests.RoleAssignmentRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
@@ -18,6 +20,8 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    private final User currentUser = (User) authentication.getPrincipal();
 
     @Override
     public UserDto getUserByUsername(String username) {
@@ -42,21 +46,27 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void updateDepartment(String username) {
-        log.info("Starting department update process for user: {}", username);
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User currentUser = (User) authentication.getPrincipal();
-        log.info("Request made by user: {} with role: {}", currentUser.getUsername(), currentUser.getRole());
-        
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> {
-                    log.error("User not found with username: {}", username);
-                    return new RuntimeException("User not found");
-                });
-                
-        log.info("Setting department {} for user {}", currentUser.getDepartment().getName(), username);
+    public void assignUserToDepartment(String username) {
+        User user = userMapper.toEntity(getUserByUsername(username));
         user.setDepartment(currentUser.getDepartment());
         userRepository.save(user);
-        log.info("Department update completed successfully for user: {}", username);
+    }
+
+    @Override
+    public void assignUserToRole(String username, RoleAssignmentRequest roleAssignmentRequest) {
+        User user = userMapper.toEntity(getUserByUsername(username));
+
+        if (currentUser.getDepartment() != user.getDepartment()) {
+            log.error("User {} is not in the same department as the current user", username);
+            throw new RuntimeException("User is not in the same department");
+        }
+
+        if (roleAssignmentRequest.role() == Role.GROUP_MANAGER && currentUser.getRole() != Role.GROUP_MANAGER) {
+            log.error("User {} does not have the required role to assign the role {}", currentUser.getUsername(), roleAssignmentRequest.role());
+            throw new RuntimeException("User does not have the required role to assign the role");
+        }
+
+        user.setRole(roleAssignmentRequest.role());
+        userRepository.save(user);
     }
 }
