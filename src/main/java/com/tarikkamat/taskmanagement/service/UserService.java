@@ -1,6 +1,8 @@
 package com.tarikkamat.taskmanagement.service;
 
 import com.tarikkamat.taskmanagement.dto.UserDto;
+import com.tarikkamat.taskmanagement.entity.User;
+import com.tarikkamat.taskmanagement.requests.ProjectAssignmentRequest;
 import com.tarikkamat.taskmanagement.requests.RoleAssignmentRequest;
 
 import java.util.List;
@@ -14,5 +16,11 @@ public interface UserService {
 
     void assignUserToDepartment(String username);
 
-    void assignUserToRole(String username, RoleAssignmentRequest role);
+    void assignUserToRole(String username, RoleAssignmentRequest roleAssignmentRequest);
+
+    void assignUserToProject(String username, ProjectAssignmentRequest projectAssignmentRequest);
+
+    UserDto toDto(User user);
+
+    User findByEmailOrUsername(String identifier);
 }

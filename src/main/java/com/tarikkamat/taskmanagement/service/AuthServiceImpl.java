@@ -4,14 +4,11 @@ import com.tarikkamat.taskmanagement.dto.TokenDto;
 import com.tarikkamat.taskmanagement.dto.UserDto;
 import com.tarikkamat.taskmanagement.entity.User;
 import com.tarikkamat.taskmanagement.exception.DatabaseException;
-import com.tarikkamat.taskmanagement.mapper.UserMapper;
-import com.tarikkamat.taskmanagement.repository.UserRepository;
 import com.tarikkamat.taskmanagement.requests.LoginRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,16 +20,13 @@ public class AuthServiceImpl implements AuthService {
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
     private final UserService userService;
-    private final UserMapper userMapper;
-    private final UserRepository userRepository;
 
     @Override
     public TokenDto authenticate(LoginRequest loginRequest) {
         String identifier = loginRequest.identifier();
         String password = loginRequest.password();
 
-        User user = userRepository.findByEmailOrUsername(identifier)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        User user = userService.findByEmailOrUsername(identifier);
 
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(identifier, password));
 
@@ -55,7 +49,7 @@ public class AuthServiceImpl implements AuthService {
             createdUser.setEmail(email);
             createdUser.setPassword(passwordEncoder.encode(password));
 
-            userService.createUser(userMapper.toDto(createdUser));
+            userService.createUser(userService.toDto(createdUser));
         } catch (DataIntegrityViolationException ex) {
             throw DatabaseException.fromDataIntegrityViolation(ex);
         }

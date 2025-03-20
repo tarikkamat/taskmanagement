@@ -2,6 +2,7 @@ package com.tarikkamat.taskmanagement.controller;
 
 import com.tarikkamat.taskmanagement.common.BaseResponse;
 import com.tarikkamat.taskmanagement.dto.UserDto;
+import com.tarikkamat.taskmanagement.requests.ProjectAssignmentRequest;
 import com.tarikkamat.taskmanagement.requests.RoleAssignmentRequest;
 import com.tarikkamat.taskmanagement.service.UserService;
 import jakarta.validation.Valid;
@@ -62,6 +63,18 @@ public class UserController {
             return ResponseEntity.ok(new BaseResponse<>(true, "Role updated", 200, null));
         } catch (Exception e) {
             log.error("Error updating role for user: {}. Error: {}", username, e.getMessage());
+            return ResponseEntity.status(404).body(new BaseResponse<>(false, e.getMessage(), 404, null));
+        }
+    }
+
+    @PatchMapping("/users/{username}/project")
+    @PreAuthorize("hasAnyAuthority('GROUP_MANAGER','PROJECT_MANAGER')")
+    public ResponseEntity<BaseResponse<Void>> assignUserToProject(@PathVariable String username, @Valid @RequestBody ProjectAssignmentRequest projectAssignmentRequest) {
+        try {
+            userService.assignUserToProject(username, projectAssignmentRequest);
+            return ResponseEntity.ok(new BaseResponse<>(true, "Project updated", 200, null));
+        } catch (Exception e) {
+            log.error("Error updating project for user: {}. Error: {}", username, e.getMessage());
             return ResponseEntity.status(404).body(new BaseResponse<>(false, e.getMessage(), 404, null));
         }
     }
