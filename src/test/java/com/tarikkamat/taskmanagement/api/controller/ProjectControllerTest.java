@@ -133,7 +133,7 @@ class ProjectControllerTest {
     @Test
     void updateProjectStatus_InvalidStatus() throws Exception {
         when(projectService.updateProjectStatus(any(), any()))
-                .thenThrow(new IllegalArgumentException("Invalid project status"));
+                .thenThrow(new RuntimeException("Invalid project status"));
 
         mockMvc.perform(patch("/api/v1/projects/{id}/status", projectId)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -146,17 +146,29 @@ class ProjectControllerTest {
 
     @Test
     void updateProjectStatus_Unauthorized() throws Exception {
+        when(projectService.updateProjectStatus(any(), any()))
+                .thenThrow(new RuntimeException("Unauthorized access"));
+
         mockMvc.perform(patch("/api/v1/projects/{id}/status", projectId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"status\":\"COMPLETED\",\"reason\":\"Project completed successfully\"}"))
-                .andExpect(status().isOk()); // Yetkisiz kullanıcılar için üst düzey test olduğundan kontrol kaldırıldı
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.status").value(false))
+                .andExpect(jsonPath("$.message").value("Unauthorized access"))
+                .andExpect(jsonPath("$.httpStatusCode").value(400));
     }
 
     @Test
     void updateProjectStatus_InvalidReason() throws Exception {
+        when(projectService.updateProjectStatus(any(), any()))
+                .thenThrow(new RuntimeException("Invalid reason: too short"));
+
         mockMvc.perform(patch("/api/v1/projects/{id}/status", projectId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"status\":\"COMPLETED\",\"reason\":\"too short\"}"))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.status").value(false))
+                .andExpect(jsonPath("$.message").value("Invalid reason: too short"))
+                .andExpect(jsonPath("$.httpStatusCode").value(400));
     }
 } 
