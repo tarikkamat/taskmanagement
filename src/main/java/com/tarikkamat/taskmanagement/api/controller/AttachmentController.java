@@ -23,7 +23,6 @@ public class AttachmentController {
     public ResponseEntity<BaseResponse<AttachmentDto>> uploadFile(
             @PathVariable UUID taskId,
             @RequestParam("file") MultipartFile file) {
-        BaseResponse<AttachmentDto> response = new BaseResponse<>();
         try {
             AttachmentDto attachmentDto = attachmentService.uploadFile(taskId, file);
             return ResponseEntity.status(201).body(new BaseResponse<>(true, "Attachment uploaded", 201, attachmentDto));
