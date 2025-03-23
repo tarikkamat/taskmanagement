@@ -38,7 +38,8 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.CREATED)
                     .body(new BaseResponse<>(true, "Registration successful", 201, null));
         } catch (Exception e) {
-            throw e;
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new BaseResponse<>(false, e.getMessage(), 500, null));
         }
     }
 }
