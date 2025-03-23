@@ -1,13 +1,13 @@
 package com.tarikkamat.taskmanagement.service;
 
+import com.tarikkamat.taskmanagement.api.requests.user.ProjectAssignmentRequest;
+import com.tarikkamat.taskmanagement.api.requests.user.RoleAssignmentRequest;
 import com.tarikkamat.taskmanagement.dto.UserDto;
 import com.tarikkamat.taskmanagement.entity.Project;
 import com.tarikkamat.taskmanagement.entity.User;
 import com.tarikkamat.taskmanagement.enums.Role;
 import com.tarikkamat.taskmanagement.mapper.UserMapper;
 import com.tarikkamat.taskmanagement.repository.UserRepository;
-import com.tarikkamat.taskmanagement.requests.ProjectAssignmentRequest;
-import com.tarikkamat.taskmanagement.requests.RoleAssignmentRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;

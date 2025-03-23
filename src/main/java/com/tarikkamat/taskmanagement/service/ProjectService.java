@@ -1,5 +1,6 @@
 package com.tarikkamat.taskmanagement.service;
 
+import com.tarikkamat.taskmanagement.api.requests.project.UpdateProjectStatusRequest;
 import com.tarikkamat.taskmanagement.dto.ProjectDto;
 import com.tarikkamat.taskmanagement.entity.Project;
 
@@ -12,4 +13,7 @@ public interface ProjectService {
     ProjectDto getProjectById(UUID id);
 
     Project toEntity(ProjectDto projectDto);
+
+    ProjectDto updateProjectStatus(UUID id, UpdateProjectStatusRequest request);
+
 }

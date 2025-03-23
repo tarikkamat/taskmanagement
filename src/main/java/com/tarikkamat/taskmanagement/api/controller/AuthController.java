@@ -1,9 +1,9 @@
-package com.tarikkamat.taskmanagement.controller;
+package com.tarikkamat.taskmanagement.api.controller;
 
+import com.tarikkamat.taskmanagement.api.requests.user.LoginRequest;
+import com.tarikkamat.taskmanagement.api.requests.user.RegisterRequest;
 import com.tarikkamat.taskmanagement.common.BaseResponse;
 import com.tarikkamat.taskmanagement.dto.TokenDto;
-import com.tarikkamat.taskmanagement.dto.UserDto;
-import com.tarikkamat.taskmanagement.requests.LoginRequest;
 import com.tarikkamat.taskmanagement.service.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -21,9 +21,9 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/authenticate")
-    public ResponseEntity<BaseResponse<TokenDto>> authenticate(@Valid @RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<BaseResponse<TokenDto>> authenticate(@Valid @RequestBody LoginRequest request) {
         try {
-            TokenDto tokenDto = authService.authenticate(loginRequest);
+            TokenDto tokenDto = authService.authenticate(request);
             return ResponseEntity.ok(new BaseResponse<>(true, "Login successful", 200, tokenDto));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
@@ -32,9 +32,9 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<BaseResponse<Void>> register(@Valid @RequestBody UserDto registerUserDto) {
+    public ResponseEntity<BaseResponse<Void>> register(@Valid @RequestBody RegisterRequest request) {
         try {
-            authService.register(registerUserDto);
+            authService.register(request);
             return ResponseEntity.status(HttpStatus.CREATED)
                     .body(new BaseResponse<>(true, "Registration successful", 201, null));
         } catch (Exception e) {

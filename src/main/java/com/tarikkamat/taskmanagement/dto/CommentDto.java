@@ -18,6 +18,10 @@ public record CommentDto(
         Date createdAt,
         Date updatedAt,
         Date deletedAt,
-        String content
+        String content,
+        UUID taskId,
+        String taskTitle,
+        UUID authorId,
+        String authorName
 ) implements Serializable {
 }

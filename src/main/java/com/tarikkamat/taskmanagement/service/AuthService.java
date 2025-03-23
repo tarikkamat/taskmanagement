@@ -1,11 +1,11 @@
 package com.tarikkamat.taskmanagement.service;
 
+import com.tarikkamat.taskmanagement.api.requests.user.LoginRequest;
+import com.tarikkamat.taskmanagement.api.requests.user.RegisterRequest;
 import com.tarikkamat.taskmanagement.dto.TokenDto;
-import com.tarikkamat.taskmanagement.dto.UserDto;
-import com.tarikkamat.taskmanagement.requests.LoginRequest;
 
 public interface AuthService {
-    TokenDto authenticate(LoginRequest loginRequest);
+    TokenDto authenticate(LoginRequest request);
 
-    void register(UserDto registerUserDto);
+    void register(RegisterRequest request);
 }

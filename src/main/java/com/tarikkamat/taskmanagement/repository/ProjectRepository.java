@@ -10,4 +10,6 @@ import java.util.UUID;
 @Repository
 public interface ProjectRepository extends JpaRepository<Project, UUID> {
     List<Project> findByDepartment_Id(UUID departmentId);
+
+    Project findByIdAndDepartment_Id(UUID id, UUID departmentId);
 }

@@ -1,5 +1,6 @@
 package com.tarikkamat.taskmanagement.service;
 
+import com.tarikkamat.taskmanagement.api.requests.project.UpdateProjectStatusRequest;
 import com.tarikkamat.taskmanagement.dto.ProjectDto;
 import com.tarikkamat.taskmanagement.entity.Project;
 import com.tarikkamat.taskmanagement.entity.User;
@@ -26,8 +27,7 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public List<ProjectDto> getAllProjects() {
-        User currentUser = getCurrentUser();
-        List<ProjectDto> projectDtos = projectMapper.toDtoList(projectRepository.findByDepartment_Id(currentUser.getDepartment().getId()));
+        List<ProjectDto> projectDtos = projectMapper.toDtoList(projectRepository.findByDepartment_Id(getCurrentUser().getDepartment().getId()));
 
         if (projectDtos.isEmpty()) {
             throw new RuntimeException("No projects found");
@@ -38,8 +38,27 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public ProjectDto getProjectById(UUID id) {
-        return projectMapper.toDto(projectRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Project not found")));
+        Project project = projectRepository.findByIdAndDepartment_Id(id, getCurrentUser().getDepartment().getId());
+
+        if (project == null) {
+            throw new RuntimeException("Error, not found projectId: " + id);
+        }
+
+        return projectMapper.toDto(project);
+    }
+
+    @Override
+    public ProjectDto updateProjectStatus(UUID id, UpdateProjectStatusRequest request) {
+        Project project = projectRepository.findByIdAndDepartment_Id(id, getCurrentUser().getDepartment().getId());
+
+        if (project == null) {
+            throw new RuntimeException("Error, not found projectId: " + id);
+        }
+
+        project.setStatus(request.status());
+        projectRepository.save(project);
+
+        return projectMapper.toDto(project);
     }
 
     @Override

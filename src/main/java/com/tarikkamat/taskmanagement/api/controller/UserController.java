@@ -1,9 +1,9 @@
-package com.tarikkamat.taskmanagement.controller;
+package com.tarikkamat.taskmanagement.api.controller;
 
+import com.tarikkamat.taskmanagement.api.requests.user.ProjectAssignmentRequest;
+import com.tarikkamat.taskmanagement.api.requests.user.RoleAssignmentRequest;
 import com.tarikkamat.taskmanagement.common.BaseResponse;
 import com.tarikkamat.taskmanagement.dto.UserDto;
-import com.tarikkamat.taskmanagement.requests.ProjectAssignmentRequest;
-import com.tarikkamat.taskmanagement.requests.RoleAssignmentRequest;
 import com.tarikkamat.taskmanagement.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +22,7 @@ public class UserController {
     public final UserService userService;
 
     @GetMapping("/users")
+    @PreAuthorize("hasAnyAuthority('GROUP_MANAGER', 'PROJECT_MANAGER')")
     public ResponseEntity<BaseResponse<List<UserDto>>> getAllUsers() {
         try {
             List<UserDto> users = userService.getAllUsers();
@@ -33,6 +34,7 @@ public class UserController {
     }
 
     @GetMapping("/users/{username}")
+    @PreAuthorize("hasAnyAuthority('GROUP_MANAGER', 'PROJECT_MANAGER', 'TEAM_LEADER') or #username == authentication.name")
     public ResponseEntity<BaseResponse<UserDto>> getUserByUsername(@PathVariable String username) {
         try {
             UserDto user = userService.getUserByUsername(username);
@@ -44,7 +46,7 @@ public class UserController {
     }
 
     @PatchMapping("/users/{username}/department")
-    @PreAuthorize("hasAnyAuthority('GROUP_MANAGER')")
+    @PreAuthorize("hasAuthority('GROUP_MANAGER')")
     public ResponseEntity<BaseResponse<Void>> assignUserToDepartment(@PathVariable String username) {
         try {
             userService.assignUserToDepartment(username);

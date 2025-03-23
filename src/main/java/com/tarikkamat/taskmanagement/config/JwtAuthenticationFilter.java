@@ -1,6 +1,6 @@
 package com.tarikkamat.taskmanagement.config;
 
-import com.tarikkamat.taskmanagement.service.JwtService;
+import com.tarikkamat.taskmanagement.security.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

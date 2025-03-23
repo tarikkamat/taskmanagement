@@ -1,4 +1,4 @@
-package com.tarikkamat.taskmanagement.requests;
+package com.tarikkamat.taskmanagement.api.requests.user;
 
 import com.tarikkamat.taskmanagement.enums.Role;
 import jakarta.validation.constraints.NotNull;

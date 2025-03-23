@@ -1,10 +1,11 @@
 package com.tarikkamat.taskmanagement.service;
 
+import com.tarikkamat.taskmanagement.api.requests.user.LoginRequest;
+import com.tarikkamat.taskmanagement.api.requests.user.RegisterRequest;
 import com.tarikkamat.taskmanagement.dto.TokenDto;
-import com.tarikkamat.taskmanagement.dto.UserDto;
 import com.tarikkamat.taskmanagement.entity.User;
 import com.tarikkamat.taskmanagement.exception.DatabaseException;
-import com.tarikkamat.taskmanagement.requests.LoginRequest;
+import com.tarikkamat.taskmanagement.security.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -22,9 +23,9 @@ public class AuthServiceImpl implements AuthService {
     private final UserService userService;
 
     @Override
-    public TokenDto authenticate(LoginRequest loginRequest) {
-        String identifier = loginRequest.identifier();
-        String password = loginRequest.password();
+    public TokenDto authenticate(LoginRequest request) {
+        String identifier = request.identifier();
+        String password = request.password();
 
         User user = userService.findByEmailOrUsername(identifier);
 
@@ -38,11 +39,11 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     @Transactional
-    public void register(UserDto registerUserDto) {
+    public void register(RegisterRequest request) {
         try {
-            String username = registerUserDto.username();
-            String email = registerUserDto.email();
-            String password = registerUserDto.password();
+            String username = request.username();
+            String email = request.email();
+            String password = request.password();
 
             User createdUser = new User();
             createdUser.setUsername(username);

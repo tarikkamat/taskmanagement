@@ -1,4 +1,4 @@
-package com.tarikkamat.taskmanagement.requests;
+package com.tarikkamat.taskmanagement.api.requests.user;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;

@@ -12,7 +12,20 @@ import java.util.UUID;
  * DTO for {@link com.tarikkamat.taskmanagement.entity.Task}
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public record TaskDto(UUID id, String createdBy, String updatedBy, String deletedBy, Date createdAt, Date updatedAt,
-                      Date deletedAt, String title, String userStoryDescription, String acceptanceCriteria,
-                      TaskState state, Priority priority, String stateReason) implements Serializable {
+public record TaskDto(
+        UUID id,
+        String createdBy,
+        String updatedBy,
+        String deletedBy,
+        Date createdAt,
+        Date updatedAt,
+        Date deletedAt,
+        String title,
+        String userStoryDescription,
+        String acceptanceCriteria,
+        TaskState state,
+        Priority priority,
+        String stateReason,
+        Integer progressPercentage
+) implements Serializable {
 }

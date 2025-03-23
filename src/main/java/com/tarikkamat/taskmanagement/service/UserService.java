@@ -1,9 +1,9 @@
 package com.tarikkamat.taskmanagement.service;
 
+import com.tarikkamat.taskmanagement.api.requests.user.ProjectAssignmentRequest;
+import com.tarikkamat.taskmanagement.api.requests.user.RoleAssignmentRequest;
 import com.tarikkamat.taskmanagement.dto.UserDto;
 import com.tarikkamat.taskmanagement.entity.User;
-import com.tarikkamat.taskmanagement.requests.ProjectAssignmentRequest;
-import com.tarikkamat.taskmanagement.requests.RoleAssignmentRequest;
 
 import java.util.List;
 

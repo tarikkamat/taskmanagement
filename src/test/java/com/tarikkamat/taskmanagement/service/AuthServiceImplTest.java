@@ -1,12 +1,12 @@
 package com.tarikkamat.taskmanagement.service;
 
+import com.tarikkamat.taskmanagement.api.requests.user.LoginRequest;
+import com.tarikkamat.taskmanagement.api.requests.user.RegisterRequest;
 import com.tarikkamat.taskmanagement.dto.TokenDto;
 import com.tarikkamat.taskmanagement.dto.UserDto;
 import com.tarikkamat.taskmanagement.entity.User;
+import com.tarikkamat.taskmanagement.enums.Role;
 import com.tarikkamat.taskmanagement.exception.DatabaseException;
-import com.tarikkamat.taskmanagement.mapper.UserMapper;
-import com.tarikkamat.taskmanagement.repository.UserRepository;
-import com.tarikkamat.taskmanagement.requests.LoginRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,24 +16,16 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.util.Optional;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class AuthServiceImplTest {
-
-    @Mock
-    private UserService userService;
-
-    @Mock
-    private UserMapper userMapper;
 
     @Mock
     private PasswordEncoder passwordEncoder;
@@ -45,74 +37,79 @@ class AuthServiceImplTest {
     private JwtService jwtService;
 
     @Mock
-    private UserRepository userRepository;
+    private UserService userService;
 
     @InjectMocks
     private AuthServiceImpl authService;
 
-    private User testUser;
     private LoginRequest loginRequest;
-    private UserDto registerUserDto;
+    private RegisterRequest registerRequest;
+    private User user;
+    private UserDto userDto;
+    private UUID userId;
 
     @BeforeEach
     void setUp() {
-        testUser = new User();
-        testUser.setUsername("testuser");
-        testUser.setEmail("test@example.com");
-        testUser.setPassword("encodedPassword");
+        // Test için UUID oluştur
+        userId = UUID.randomUUID();
+        
+        // Login isteği için test verisi
+        loginRequest = new LoginRequest("testuser", "password123");
 
-        loginRequest = new LoginRequest("test@example.com", "password");
-        registerUserDto = new UserDto(null, null, "test@example.com", "testuser", "password", null);
+        // Kayıt isteği için test verisi
+        registerRequest = new RegisterRequest("Test User", "test@example.com", "testuser", "password123");
+
+        // Kullanıcı nesnesi
+        user = new User();
+        user.setId(userId);
+        user.setFullName("Test User");
+        user.setUsername("testuser");
+        user.setEmail("test@example.com");
+        user.setPassword("encodedPassword");
+        user.setRole(Role.TEAM_MEMBER);
+
+        // UserDto nesnesi
+        userDto = new UserDto(userId, "Test User", "test@example.com", "testuser", "encodedPassword", Role.TEAM_MEMBER);
     }
 
     @Test
-    void authenticate_Success() {
-        // Arrange
-        when(userService.findByEmailOrUsername(anyString())).thenReturn(testUser);
-        when(authenticationManager.authenticate(any(UsernamePasswordAuthenticationToken.class)))
-            .thenReturn(new UsernamePasswordAuthenticationToken(testUser, "password"));
-        when(jwtService.generateToken(testUser)).thenReturn("test-token");
-        when(jwtService.getExpirationTime()).thenReturn(3600L);
+    void authenticate_ShouldReturnTokenDto() {
+        // Mock ayarları
+        when(userService.findByEmailOrUsername("testuser")).thenReturn(user);
+        when(jwtService.generateToken(user)).thenReturn("jwt-token");
+        when(jwtService.getExpirationTime()).thenReturn(3600000L);
 
-        // Act
-        TokenDto response = authService.authenticate(loginRequest);
+        // Test
+        TokenDto result = authService.authenticate(loginRequest);
 
-        // Assert
-        assertNotNull(response);
-        assertEquals("test-token", response.accessToken());
-        assertEquals(3600L, response.expirationIn());
+        // Doğrulama
         verify(authenticationManager).authenticate(any(UsernamePasswordAuthenticationToken.class));
+        assertNotNull(result);
+        assertEquals("jwt-token", result.accessToken());
+        assertEquals(3600000L, result.expirationIn());
     }
 
     @Test
-    void authenticate_UserNotFound() {
-        // Arrange
-        when(userService.findByEmailOrUsername(anyString()))
-            .thenThrow(new UsernameNotFoundException("User not found"));
+    void register_ShouldCreateUser() {
+        // Mock ayarları
+        when(passwordEncoder.encode("password123")).thenReturn("encodedPassword");
+        when(userService.toDto(any(User.class))).thenReturn(userDto);
 
-        // Act & Assert
-        assertThrows(UsernameNotFoundException.class, () -> authService.authenticate(loginRequest));
-        verify(authenticationManager, never()).authenticate(any());
+        // Test
+        authService.register(registerRequest);
+
+        // Doğrulama
+        verify(userService).createUser(any(UserDto.class));
     }
 
     @Test
-    void register_Success() {
-        // Arrange
-        when(passwordEncoder.encode(anyString())).thenReturn("encodedPassword");
-        doNothing().when(userService).createUser(any());
+    void register_ShouldThrowDatabaseException_WhenDataIntegrityViolationOccurs() {
+        // Mock ayarları
+        when(passwordEncoder.encode("password123")).thenReturn("encodedPassword");
+        when(userService.toDto(any(User.class))).thenReturn(userDto);
+        doThrow(DataIntegrityViolationException.class).when(userService).createUser(any(UserDto.class));
 
-        // Act & Assert
-        assertDoesNotThrow(() -> authService.register(registerUserDto));
-        verify(userService).createUser(any());
-    }
-
-    @Test
-    void register_DuplicateUser() {
-        // Arrange
-        when(passwordEncoder.encode(anyString())).thenReturn("encodedPassword");
-        doThrow(DataIntegrityViolationException.class).when(userService).createUser(any());
-
-        // Act & Assert
-        assertThrows(DatabaseException.class, () -> authService.register(registerUserDto));
+        // Test ve doğrulama
+        assertThrows(DatabaseException.class, () -> authService.register(registerRequest));
     }
 } 

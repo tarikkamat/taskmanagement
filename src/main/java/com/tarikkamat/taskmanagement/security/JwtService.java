@@ -1,4 +1,4 @@
-package com.tarikkamat.taskmanagement.service;
+package com.tarikkamat.taskmanagement.security;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
