@@ -7,6 +7,7 @@ import com.tarikkamat.taskmanagement.dto.UserDto;
 import com.tarikkamat.taskmanagement.entity.User;
 import com.tarikkamat.taskmanagement.enums.Role;
 import com.tarikkamat.taskmanagement.exception.DatabaseException;
+import com.tarikkamat.taskmanagement.security.JwtService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
