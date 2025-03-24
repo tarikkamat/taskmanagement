@@ -24,21 +24,21 @@ public class DefaultUserInitializer implements CommandLineRunner {
     private final DepartmentRepository departmentRepository;
     private final PasswordEncoder passwordEncoder;
     private final UserMapper userMapper;
-    
+
     @Value("${app.demo-content.enabled:false}")
     private boolean demoContentEnabled;
 
     @Override
     @Transactional
     public void run(String... args) {
-        if (demoContentEnabled && userRepository.count() == 0) {
+        if (userRepository.count() == 0) {
             // Create departments
             Department softwareDepartment = createDepartment("Software Development");
             Department marketingDepartment = createDepartment("Marketing");
 
             // Create project manager for Software Department
             createAndSaveUser("Software Project Manager", "project.manager@example.com", "projectmanager", "Manager123!", Role.PROJECT_MANAGER, softwareDepartment);
-            
+
             // Create department managers
             User softwareManager = createAndSaveUser("Software Manager", "software.manager@example.com", "softwaremanager", "Manager123!", Role.GROUP_MANAGER, softwareDepartment);
             User marketingManager = createAndSaveUser("Marketing Manager", "marketing.manager@example.com", "marketingmanager", "Manager123!", Role.GROUP_MANAGER, marketingDepartment);
