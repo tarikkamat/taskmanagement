@@ -22,7 +22,7 @@ cd TaskManagement
 
 2. Environment dosyasını oluşturun
 ```bash
-cp example.env .env
+cp example.env docker/.env
 ```
 > Not: Güvenlik için `.env` dosyasındaki değerleri production ortamında değiştirmeyi unutmayın.
 
